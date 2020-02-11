@@ -147,9 +147,6 @@ func main() {
 	db.Exec("CREATE TABLE users (id SERIAL,username VARCHAR(255), password VARCHAR(255), email VARCHAR(255), data JSON, PRIMARY KEY (id))")
 	db.Exec("CREATE TABLE tokens (id VARCHAR(255), user_id INT, expiration DATETIME)")
 
-	fs := http.FileServer(http.Dir("public"))
-	http.Handle("/", fs)
-
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var body User
@@ -265,6 +262,7 @@ func main() {
 		}
 	})
 
+	http.Handle("/", http.FileServer(http.Dir("public")))
 	// Configure websocket route
 	http.HandleFunc("/ws", handleConnections)
 

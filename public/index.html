@@ -2,74 +2,99 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Simple Chat</title>
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/emojione/2.2.6/assets/css/emojione.min.css"
-    />
-    <link rel="stylesheet" href="/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>MyWebSite</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header>
-      <nav>
-        <div class="nav-wrapper">
-          <a href="/" class="brand-logo right">Simple Chat</a>
-        </div>
-      </nav>
-    </header>
-    <main id="app">
-      <div class="row">
-        <div class="col s12">
-          <div class="card horizontal">
-            <div
-              id="chat-messages"
-              class="card-content"
-              v-html="chatContent"
-            ></div>
-          </div>
-        </div>
+
+    <h1>Bienvenue sur mon chat</h1>
+
+    <div class="error-register"></div>      
+    <div class="error-login"></div>
+
+    <div class="container-register">
+      <form method="post" class="registerform">
+      <h2>Register</h2>
+      <div class="imgcontainer">
+        <img
+          src="/img/img_avatar2.png"
+          alt="Avatar"
+          class="avatar"
+        />
       </div>
-      <div class="row" v-if="joined">
-        <div class="input-field col s8">
-          <input type="text" v-model="newMsg" @keyup.enter="send" />
-        </div>
-        <div class="input-field col s4">
-          <button class="waves-effect waves-light btn" @click="send">
-            <i class="material-icons right">chat</i>
-            Send
-          </button>
-        </div>
+
+      <div class="container">
+        <label for="name"><b>Username</b></label>
+        <input 
+        type="text" 
+        class="input" 
+        placeholder="Enter Username" 
+        name="login" 
+        value="" 
+        required 
+        />
+
+        <label for="psw"><b>Password</b></label>
+        <input
+          type="password"
+          placeholder="Enter Password"
+          name="password"
+          class="input"
+          value="" 
+          required
+        />
+
+        <label for="email"><b>email</b></label>
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Entrer Email"
+          class="input"
+          value=""  
+          required
+        />
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+    <div class="container-login">
+      <form method="post" class="loginform">
+      <h2>Login</h2>
+      <div class="imgcontainer">
+        <img
+          src="../../../assets/img/img_avatar2.png"
+          alt="Avatar"
+          class="avatar"
+        />
       </div>
-      <div class="row" v-if="!joined">
-        <div class="input-field col s8">
-          <input type="email" v-model.trim="email" placeholder="Email" />
-        </div>
-        <div class="input-field col s8">
-          <input type="text" v-model.trim="username" placeholder="Username" />
-        </div>
-        <div class="input-field col s4">
-          <button class="waves-effect waves-light btn" @click="join()">
-            <i class="material-icons right">done</i>
-            Join
-          </button>
-        </div>
-      </div>
-    </main>
-    <footer class="page-footer"></footer>
-    <script src="https://unpkg.com/vue@2.1.3/dist/vue.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/emojione/2.2.6/lib/js/emojione.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-    <script src="/app.js"></script>
+
+      <div class="container">
+        <label for="login"><b>Username</b></label>
+        <input 
+        type="text" 
+        placeholder="Enter Username" 
+        name="login" 
+        class="input"
+        value="" 
+        required 
+        />
+
+        <label for="password"><b>Password</b></label>
+        <input
+          type="password"
+          placeholder="Enter Password"
+          name="password"
+          class="input"
+          value="" 
+          required
+        />
+
+        <button type="submit">Connexion</button>
+      </form>
+    </div>
+    <script src="./app.js"></script>
   </body>
 </html>

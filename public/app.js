@@ -1,71 +1,110 @@
-new Vue({
-  el: "#app",
+(function() {
+  // var ws = new WebSocket("ws://localhost:1338");
 
-  data: {
-    ws: null, // Our websocket
-    newMsg: "", // Holds new messages to be sent to the server
-    chatContent: "", // A running list of chat messages displayed on the screen
-    email: null, // Email address used for grabbing an avatar
-    username: null, // Our username
-    joined: false // True if email and username have been filled in
-  },
-
-  created: function() {
-    var self = this;
-    this.ws = new WebSocket("ws://" + window.location.host + "/ws");
-    this.ws.addEventListener("message", function(e) {
-      var msg = JSON.parse(e.data);
-      self.chatContent +=
-        '<div class="chip">' +
-        '<img src="' +
-        self.gravatarURL(msg.email) +
-        '">' + // Avatar
-        msg.username +
-        "</div>" +
-        emojione.toImage(msg.message) +
-        "<br/>"; // Parse emojis
-
-      var element = document.getElementById("chat-messages");
-      element.scrollTop = element.scrollHeight; // Auto scroll to the bottom
+  // var chatform = document.querySelector(".chatform");
+  var loginform = document.querySelector(".loginform");
+  var registerform = document.querySelector(".registerform");
+  // document.querySelector("#chat").style.display = "none";
+  async function sendLogging(login, password) {
+    const loginResponse = await fetch("http://localhost:1337/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: login,
+        password: password
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
-  },
+    const loginResponseValue = await loginResponse.text();
 
-  methods: {
-    send: function() {
-      if (this.newMsg != "") {
-        this.ws.send(
-          JSON.stringify({
-            email: this.email,
-            username: this.username,
-            message: $("<p>")
-              .html(this.newMsg)
-              .text() // Strip out html
-          })
-        );
-        this.newMsg = ""; // Reset newMsg
-      }
-    },
+    if (loginResponse.status !== 200) {
+      document.querySelector(".error-login").textContent = loginResponseValue;
+      return;
+    } else {
+      document.querySelector(".error-login").textContent = "Bienvenue !";
+      // Simulate a mouse click:
+      window.location.href = "/pages/chat/";
+    }
 
-    join: function() {
-      if (!this.email) {
-        Materialize.toast("You must enter an email", 2000);
-        return;
-      }
-      if (!this.username) {
-        Materialize.toast("You must choose a username", 2000);
-        return;
-      }
-      this.email = $("<p>")
-        .html(this.email)
-        .text();
-      this.username = $("<p>")
-        .html(this.username)
-        .text();
-      this.joined = true;
-    },
+    // const ticketResponse = await fetch("http://localhost:1337/wsTicket", {
+    //   method: "GET"
+    // });
 
-    gravatarURL: function(email) {
-      return "http://www.gravatar.com/avatar/" + CryptoJS.MD5(email);
+    // const ticketResponseValue = await ticketResponse.text();
+    // if (ticketResponse.ok) {
+    //   ws.send(ticketResponseValue);
+    //   document.querySelector("#login").style.display = "none";
+    //   document.querySelector("#chat").style.display = "block";
+    //   document.querySelector("input[name=message]").focus();
+    // } else {
+    //   document.querySelector(".error").textContent = ticketResponseValue;
+    // }
+  }
+
+  async function sendRegister(login, password, email) {
+    const response = await fetch("http://localhost:1337/register", {
+      method: "POST",
+      body: JSON.stringify({
+        username: login,
+        password: password,
+        email: email
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const registerResponseValue = await response.text();
+    if (response.status !== 200) {
+      document.querySelector(
+        ".error-register"
+      ).textContent = registerResponseValue;
+    } else {
+      document.querySelector(".error-register").textContent =
+        "Le compte a été créé !";
+      document.querySelector(".registerform").style.display = "none";
+      document.querySelector(".container-login").style.display = "block";
     }
   }
-});
+
+  loginform.onsubmit = function(e) {
+    e.preventDefault();
+    var loginInput = loginform.querySelector("input[name=login]");
+    var passwordInput = loginform.querySelector("input[name=password]");
+    var login = loginInput.value;
+    var password = passwordInput.value;
+    sendLogging(login, password);
+    loginInput.value = "";
+    passwordInput.value = "";
+  };
+
+  registerform.onsubmit = function(e) {
+    e.preventDefault();
+    var loginInput = registerform.querySelector("input[name=login]");
+    var passwordInput = registerform.querySelector("input[name=password]");
+    var emailInput = registerform.querySelector("input[name=email]");
+    sendRegister(loginInput.value, passwordInput.value, emailInput.value);
+    loginInput.value = "";
+    passwordInput.value = "";
+    emailInput.value = "";
+  };
+
+  // chatform.onsubmit = function(e) {
+  //   e.preventDefault();
+  //   var input = document.querySelector("input[name=message]");
+  //   var text = input.value;
+  //   ws.send(text);
+  //   input.value = "";
+  //   input.focus();
+  //   return false;
+  // };
+
+  // ws.onmessage = function(msg) {
+  //   var response = msg.data;
+  //   var messageList = document.querySelector(".messages");
+  //   var li = document.createElement("li");
+  //   li.textContent = response;
+  //   messageList.appendChild(li);
+  // };
+})();
