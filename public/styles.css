@@ -14,10 +14,14 @@ h2 {
 
 .registerform {
   display: block;
+  max-width: 50%;
+  margin: auto;
 }
 
 form {
   border: 3px solid #f1f1f1;
+  max-width: 50%;
+  margin: auto;
 }
 
 input[type="text"],
@@ -57,7 +61,7 @@ button:hover {
 }
 
 img.avatar {
-  width: 40%;
+  width: 25rem;
   border-radius: 50%;
 }
 
